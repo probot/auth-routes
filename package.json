@@ -1,0 +1,29 @@
+{
+  "name": "auth-routes",
+  "version": "1.0.0",
+  "description": "Helpful authentication routes for Probot Apps",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest && standard",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": [],
+  "author": "Jason Etcovitch",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "^15.2.6",
+    "request": "^2.85.0"
+  },
+  "devDependencies": {
+    "express": "^4.16.3",
+    "jest": "^22.4.3",
+    "nock": "^9.2.3",
+    "standard": "^11.0.1",
+    "supertest": "^3.0.0"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  }
+}
