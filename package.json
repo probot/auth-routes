@@ -11,8 +11,7 @@
   "author": "Jason Etcovitch",
   "license": "ISC",
   "dependencies": {
-    "@octokit/rest": "^15.2.6",
-    "request": "^2.85.0"
+    "@octokit/rest": "^15.2.6"
   },
   "devDependencies": {
     "express": "^4.16.3",

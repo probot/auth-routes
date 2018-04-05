@@ -1,8 +1,5 @@
-const request = require('request')
 const querystring = require('querystring')
-const {promisify} = require('util')
 const octokit = require('@octokit/rest')()
-const post = promisify(request.post)
 
 module.exports = (app, options = {}) => {
   const opts = {
@@ -33,15 +30,20 @@ module.exports = (app, options = {}) => {
 
   app.get(opts.callbackURL, async (req, res) => {
     // complete OAuth dance
-    const tokenRes = await post({
-      url: 'https://github.com/login/oauth/access_token',
-      form: {
-        client_id: opts.client_id,
-        client_secret: opts.client_secret,
-        code: req.query.code,
-        state: req.query.state
-      },
-      json: true
+    const qs = querystring.stringify({
+      client_id: opts.client_id,
+      client_secret: opts.client_secret,
+      code: req.query.code,
+      state: req.query.state
+    })
+
+    const tokenRes = await octokit.request({
+      method: 'POST',
+      url: `https://github.com/login/oauth/access_token?${qs}`,
+      headers: {
+        accept: 'application/vnd.github.machine-man-preview+json',
+        'content-type': 'application/x-www-form-urlencoded'
+      }
     })
 
     if (tokenRes.statusCode === 200) {
