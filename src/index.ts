@@ -1,6 +1,6 @@
+import { Application } from 'express'
 import querystring from 'querystring'
 import { post } from 'request-promise-native'
-import { Application } from 'express'
 
 export interface AuthRouteOptions {
   loginURL?: string
@@ -12,9 +12,9 @@ export interface AuthRouteOptions {
 
 export function registerAuthRoutes (app: Application, options: AuthRouteOptions): void {
   const opts = {
-    loginURL: '/login',
-    callbackURL: '/login/cb',
     afterLogin: '/',
+    callbackURL: '/login/cb',
+    loginURL: '/login',
     ...options
   }
 
@@ -45,7 +45,7 @@ export function registerAuthRoutes (app: Application, options: AuthRouteOptions)
         },
         json: true
       })
-  
+
       if (tokenRes.statusCode === 200) {
         // Redirect after login
         res.redirect(opts.afterLogin)

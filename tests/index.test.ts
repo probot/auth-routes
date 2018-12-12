@@ -1,10 +1,12 @@
 import express, { Application } from 'express'
 import nock from 'nock'
 import supertest, { SuperTest, Test } from 'supertest'
-import { registerAuthRoutes, AuthRouteOptions } from '../src'
+import { AuthRouteOptions, registerAuthRoutes } from '../src'
 
 describe('auth-routes', () => {
-  let agent: SuperTest<Test>, app: Application, opts: AuthRouteOptions
+  let agent: SuperTest<Test>
+  let app: Application
+  let opts: AuthRouteOptions
 
   beforeEach(() => {
     app = express()
