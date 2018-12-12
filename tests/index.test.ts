@@ -30,7 +30,7 @@ describe('auth-routes', () => {
 
     const res = await agent.get('/login/cb')
     expect(res.status).toBe(302)
-    // expect(res.headers.location).toBe('/')
+    expect(res.get('location')).toBe('/')
   })
 
   it('responds with a 500 with an invalid code', async () => {
