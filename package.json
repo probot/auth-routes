@@ -2,28 +2,68 @@
   "name": "auth-routes",
   "version": "1.0.0",
   "description": "Helpful authentication routes for Probot Apps",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "scripts": {
-    "test": "jest && standard",
-    "test:coverage": "jest --coverage"
+    "build": "rimraf lib && tsc -p tsconfig.json",
+    "lint": "tslint --project tests",
+    "test": "tsc --noEmit -p tests && jest --coverage && npm run lint",
+    "test:update": "tsc --noEmit -p tests && jest --coverage -u && npm run lint",
+    "prepare": "npm test && npm run build"
   },
   "keywords": [],
   "author": "Jason Etcovitch",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/probot/auth-routes.git"
+  },
   "license": "ISC",
   "dependencies": {
     "@octokit/rest": "^15.2.6",
-    "request": "^2.85.0"
+    "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
+    "@types/express": "^4.16.0",
+    "@types/jest": "^23.3.10",
+    "@types/nock": "^9.3.0",
+    "@types/node": "^10.12.14",
+    "@types/request-promise-native": "^1.0.15",
+    "@types/supertest": "^2.0.7",
     "express": "^4.16.3",
-    "jest": "^22.4.3",
+    "jest": "^23.6.0",
     "nock": "^9.2.3",
     "standard": "^11.0.1",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "ts-jest": "^23.10.5",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.17.0",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.2.2"
   },
   "standard": {
     "env": [
       "jest"
     ]
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/lib/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      ".+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.(ts|js)"
+    ],
+    "globals": {
+      "ts-jest": {
+        "babelConfig": false
+      }
+    }
   }
 }

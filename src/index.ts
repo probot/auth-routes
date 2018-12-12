@@ -1,25 +1,24 @@
-const request = require('request')
-const querystring = require('querystring')
-const {promisify} = require('util')
-const octokit = require('@octokit/rest')()
-const post = promisify(request.post)
+import querystring from 'querystring'
+import { post } from 'request-promise-native'
+import { Application } from 'express'
 
-module.exports = (app, options = {}) => {
+export interface AuthRouteOptions {
+  loginURL?: string
+  callbackURL?: string
+  afterLogin?: string
+  client_id: string
+  client_secret: string
+}
+
+export function registerAuthRoutes (app: Application, options: AuthRouteOptions): void {
   const opts = {
     loginURL: '/login',
     callbackURL: '/login/cb',
     afterLogin: '/',
-    client_id: process.env.CLIENT_ID,
-    client_secret: process.env.CLIENT_SECRET,
     ...options
   }
 
   app.get(opts.loginURL, (req, res) => {
-    // Store the users previous place (if they were on GitHub Learn)
-    if (req.session && req.get('Referrer') && req.get('Referrer').includes(req.get('host'))) {
-      req.session.redirect = req.get('Referrer')
-    }
-
     const protocol = req.headers['x-forwarded-proto'] || req.protocol
     const host = req.headers['x-forwarded-host'] || req.get('host')
 
@@ -45,17 +44,6 @@ module.exports = (app, options = {}) => {
     })
 
     if (tokenRes.statusCode === 200) {
-      // Set the user's session if there is a session
-      if (req.session) {
-        // Authenticate the GitHub client as the user
-        octokit.authenticate({ type: 'token', token: tokenRes.body.access_token })
-
-        // Fetch that user's data from GitHub
-        const {data: user} = await octokit.users.get({})
-
-        req.session.user = user
-      }
-
       // Redirect after login
       res.redirect(opts.afterLogin)
     } else {
