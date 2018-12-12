@@ -45,16 +45,6 @@ describe('auth-routes', () => {
     expect(res.text).toBe('Invalid code')
   })
 
-  it('responds with a 500 with a non-200 response', async () => {
-    registerAuthRoutes(app, opts)
-    nock('https://github.com').post('/login/oauth/access_token')
-      .reply(201)
-
-    const res = await agent.get('/login/cb')
-    expect(res.status).toBe(500)
-    expect(res.text).toBe('Invalid code')
-  })
-
   it('overwrites default options', async () => {
     registerAuthRoutes(app, { ...opts, loginURL: '/eat-some-pizza' })
 

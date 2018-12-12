@@ -1,6 +1,7 @@
 import { Application } from 'express'
+import fetch from 'node-fetch'
 import querystring from 'querystring'
-import { post } from 'request-promise-native'
+import { URLSearchParams } from 'url'
 
 export interface AuthRouteOptions {
   loginURL?: string
@@ -32,28 +33,23 @@ export function registerAuthRoutes (app: Application, options: AuthRouteOptions)
   })
 
   app.get(opts.callbackURL, async (req, res) => {
-    try {
-      // Complete OAuth dance
-      const tokenRes = await post({
-        url: 'https://github.com/login/oauth/access_token',
-        resolveWithFullResponse: true,
-        form: {
-          client_id: opts.client_id,
-          client_secret: opts.client_secret,
-          code: req.query.code,
-          state: req.query.state
-        },
-        json: true
-      })
+    const params = querystring.stringify({
+      client_id: opts.client_id,
+      client_secret: opts.client_secret,
+      code: req.query.code,
+      state: req.query.state
+    })
 
-      if (tokenRes.statusCode === 200) {
-        // Redirect after login
-        res.redirect(opts.afterLogin)
-      } else {
-        res.status(500)
-        res.send('Invalid code')
-      }
-    } catch (err) {
+    // Complete OAuth dance
+    const tokenRes = await fetch('https://github.com/login/oauth/access_token', {
+      method: 'POST',
+      body: new URLSearchParams(params)
+    })
+
+    if (tokenRes.ok) {
+      // Redirect after login
+      res.redirect(opts.afterLogin)
+    } else {
       res.status(500)
       res.send('Invalid code')
     }
