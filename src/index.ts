@@ -26,27 +26,34 @@ export function registerAuthRoutes (app: Application, options: AuthRouteOptions)
       client_id: opts.client_id,
       redirect_uri: `${protocol}://${host}${opts.callbackURL}`
     })
+
     const url = `https://github.com/login/oauth/authorize?${params}`
     res.redirect(url)
   })
 
   app.get(opts.callbackURL, async (req, res) => {
-    // complete OAuth dance
-    const tokenRes = await post({
-      url: 'https://github.com/login/oauth/access_token',
-      form: {
-        client_id: opts.client_id,
-        client_secret: opts.client_secret,
-        code: req.query.code,
-        state: req.query.state
-      },
-      json: true
-    })
-
-    if (tokenRes.statusCode === 200) {
-      // Redirect after login
-      res.redirect(opts.afterLogin)
-    } else {
+    try {
+      // Complete OAuth dance
+      const tokenRes = await post({
+        url: 'https://github.com/login/oauth/access_token',
+        resolveWithFullResponse: true,
+        form: {
+          client_id: opts.client_id,
+          client_secret: opts.client_secret,
+          code: req.query.code,
+          state: req.query.state
+        },
+        json: true
+      })
+  
+      if (tokenRes.statusCode === 200) {
+        // Redirect after login
+        res.redirect(opts.afterLogin)
+      } else {
+        res.status(500)
+        res.send('Invalid code')
+      }
+    } catch (err) {
       res.status(500)
       res.send('Invalid code')
     }
