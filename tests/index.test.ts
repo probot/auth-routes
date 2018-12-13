@@ -1,18 +1,24 @@
-const express = require('express')
-const nock = require('nock')
-const supertest = require('supertest')
-const routes = require('.')
+import express, { Application } from 'express'
+import nock from 'nock'
+import supertest, { SuperTest, Test } from 'supertest'
+import { AuthRouteOptions, registerAuthRoutes } from '../src'
 
 describe('auth-routes', () => {
-  let agent, app
+  let agent: SuperTest<Test>
+  let app: Application
+  let opts: AuthRouteOptions
 
   beforeEach(() => {
     app = express()
     agent = supertest.agent(app)
+    opts = {
+      client_id: '123abc',
+      client_secret: '456def'
+    }
   })
 
   it('GET /login', async () => {
-    routes(app)
+    registerAuthRoutes(app, opts)
 
     await agent.get('/login')
       .expect(302)
@@ -20,17 +26,17 @@ describe('auth-routes', () => {
   })
 
   it('redirects to / from callback', async () => {
-    routes(app)
+    registerAuthRoutes(app, opts)
     nock('https://github.com').post('/login/oauth/access_token')
       .reply(200, { access_token: 'testing123', token_type: 'bearer' })
 
     const res = await agent.get('/login/cb')
     expect(res.status).toBe(302)
-    expect(res.headers.location).toBe('/')
+    expect(res.get('location')).toBe('/')
   })
 
   it('responds with a 500 with an invalid code', async () => {
-    routes(app)
+    registerAuthRoutes(app, opts)
     nock('https://github.com').post('/login/oauth/access_token')
       .reply(500)
 
@@ -40,29 +46,10 @@ describe('auth-routes', () => {
   })
 
   it('overwrites default options', async () => {
-    routes(app, { loginURL: '/eat-some-pizza' })
+    registerAuthRoutes(app, { ...opts, loginURL: '/eat-some-pizza' })
 
     await agent.get('/eat-some-pizza')
       .expect(302)
       .expect('Location', /^https:\/\/github.com\/login\/oauth\/authorize/)
-  })
-
-  it('adds the user\'s data to the session', async () => {
-    nock('https://github.com').post('/login/oauth/access_token')
-      .reply(200, { access_token: 'testing123', token_type: 'bearer' })
-    nock('https://api.github.com').get('/user')
-      .reply(200, { id: 123 })
-
-    const session = {}
-
-    app.use((req, res, next) => {
-      req.session = session
-      next()
-    })
-
-    routes(app)
-
-    await agent.get('/login/cb')
-    expect(session).toEqual({ user: { id: 123 } })
   })
 })
