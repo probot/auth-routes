@@ -4,6 +4,12 @@
 
 <p align="center"><a href="https://npmjs.com/package/auth-routes"><img src="https://badgen.net/npm/v/auth-routes" alt="NPM"></a> <a href="https://travis-ci.com/probot/auth-routes"><img src="https://badgen.now.sh/travis/probot/auth-routes" alt="Build Status"></a> <a href="https://codecov.io/gh/probot/auth-routes/"><img src="https://badgen.now.sh/codecov/c/github/probot/auth-routes" alt="Codecov"></a></p>
 
+## Install
+
+```bash
+$ npm install auth-routes
+```
+
 ## Usage
 
 ```js
