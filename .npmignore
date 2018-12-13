@@ -1,0 +1,7 @@
+tests
+src
+coverage
+.travis.yml
+codecov.yml
+tsconfig.json
+tslint.json
