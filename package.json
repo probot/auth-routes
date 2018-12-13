@@ -1,7 +1,7 @@
 {
   "name": "auth-routes",
   "version": "0.0.1",
-  "description": "Helpful authentication routes for Probot Apps",
+  "description": "Helpful authentication routes for Node.js GitHub integrations",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
@@ -11,7 +11,12 @@
     "test:update": "tsc --noEmit -p tests && jest --coverage -u && npm run lint",
     "prepare": "npm test && npm run build"
   },
-  "keywords": [],
+  "keywords": [
+    "github",
+    "github app",
+    "authentication",
+    "express"
+  ],
   "author": "Jason Etcovitch",
   "repository": {
     "type": "git",
