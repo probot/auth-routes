@@ -18,10 +18,7 @@
     "express"
   ],
   "author": "Jason Etcovitch",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/probot/auth-routes.git"
-  },
+  "repository": "github:probot/auth-routes",
   "license": "ISC",
   "dependencies": {
     "@octokit/rest": "^15.2.6",
