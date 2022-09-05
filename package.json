@@ -67,10 +67,5 @@
         "babelConfig": false
       }
     }
-  },
-  "renovate": {
-    "extends": [
-      "github>octokit/.github"
-    ]
   }
 }
