@@ -21,7 +21,7 @@
   "repository": "github:probot/auth-routes",
   "license": "ISC",
   "dependencies": {
-    "@octokit/rest": "^15.2.6",
+    "@octokit/rest": "^19.0.0",
     "node-fetch": "^2.3.0"
   },
   "devDependencies": {
