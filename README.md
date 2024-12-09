@@ -13,44 +13,44 @@ $ npm install auth-routes
 ## Usage
 
 ```js
-const { registerAuthRoutes } = require('auth-routes')
+const { registerAuthRoutes } = require("auth-routes");
 
-const app = express()
+const app = express();
 registerAuthRoutes(app, {
   client_id: process.env.GITHUB_CLIENT_ID,
-  client_secret: process.env.GITHUB_CLIENT_SECRET
-})
+  client_secret: process.env.GITHUB_CLIENT_SECRET,
+});
 
 // Or pass some options:
 registerAuthRoutes(app, {
-  loginURL: '/log-me-in',
-  callbackURL: '/call-me-back',
+  loginURL: "/log-me-in",
+  callbackURL: "/call-me-back",
   client_id: process.env.GITHUB_CLIENT_ID,
-  client_secret: process.env.GITHUB_CLIENT_SECRET
-})
+  client_secret: process.env.GITHUB_CLIENT_SECRET,
+});
 ```
 
 ### Use with Probot
 
 ```js
-module.exports = app => {
+module.exports = (app) => {
   // Access the Express server that Probot uses
-  const expressApp = app.route()
+  const expressApp = app.route();
 
   // Register the routes as normal
   registerAuthRoutes(expressApp, {
     client_id: process.env.GITHUB_CLIENT_ID,
-    client_secret: process.env.GITHUB_CLIENT_SECRET
-  })
-}
+    client_secret: process.env.GITHUB_CLIENT_SECRET,
+  });
+};
 ```
 
 ## Options
 
-| Name | Description | Required | Default |
-| ------- | ----------- | ------- | ------- |
-| `client_id` | GitHub App's Client ID | ✓ | - |
-| `client_secret` | GitHub App's Client Secret | ✓ | - |
-| `loginURL` | Login path |  | `'/login'` |
-| `callbackURL` | Authorization callback URL, for your GitHub App |  | `'/login/cb'` |
-| `afterLogin` | Where users are redirected to after they've logged in |  | `'/'` |
+| Name            | Description                                           | Required | Default       |
+| --------------- | ----------------------------------------------------- | -------- | ------------- |
+| `client_id`     | GitHub App's Client ID                                | ✓        | -             |
+| `client_secret` | GitHub App's Client Secret                            | ✓        | -             |
+| `loginURL`      | Login path                                            |          | `'/login'`    |
+| `callbackURL`   | Authorization callback URL, for your GitHub App       |          | `'/login/cb'` |
+| `afterLogin`    | Where users are redirected to after they've logged in |          | `'/'`         |

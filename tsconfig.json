@@ -1,27 +1,19 @@
 {
+  "extends": "@octokit/tsconfig",
   "compilerOptions": {
-    "allowJs": false,
-    "lib": [
-      "es2015",
-      "es2017"
-    ],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "target": "es5",
+    "verbatimModuleSyntax": false,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
     "pretty": true,
-    "strict": true,
     "sourceMap": true,
     "outDir": "./lib",
     "skipLibCheck": true,
     "noImplicitAny": true,
     "esModuleInterop": true,
-    "declaration": true // enable this once all files are .ts and we can remove allowJs
+    "declaration": true,
+    "allowJs": true,
+    "lib": ["es2023", "dom"]
   },
-  "include": [
-    "src/**/*"
-  ],
+  "include": ["src/**/*"],
   "compileOnSave": false
 }
